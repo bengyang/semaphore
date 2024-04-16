@@ -1,0 +1,31 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: hostname
+      debug:
+        var=ansible_hostname
+
+    - name: Update the repository cache
+      vars:
+      apt:
+        update_cache: yes
+        force_apt_get: yes
+        cache_valid_time: 3600
+
+    - name: Upgrade all packages
+      vars:
+      apt:
+        upgrade: 'dist'
+        force_apt_get: yes
+
+    - name: Reboot if kernel is updated
+      vars:
+      reboot:
+        msg: "Reboot initiated by Ansible for applying Kernel Updates"
+        connect_timeout: 5
+        reboot_timeout: 300
+        pre_reboot_delay: 0
+        post_reboot_delay: 30
+        test_command: uptime
+      when: reboot_required_file_existence.stat.exists
