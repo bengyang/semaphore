@@ -20,7 +20,6 @@
         force_apt_get: yes
 
     - name: Reboot if kernel is updated
-      vars:
       reboot:
         msg: "Reboot initiated by Ansible for applying Kernel Updates"
         connect_timeout: 5
@@ -28,4 +27,4 @@
         pre_reboot_delay: 0
         post_reboot_delay: 30
         test_command: uptime
-        when: reboot_required_file.stat.exists
+      when: reboot_required_file.stat.exists
